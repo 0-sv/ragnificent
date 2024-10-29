@@ -11,7 +11,7 @@ export default {
   },
   plugins: [
     // always put chromeExtension() before other plugins
-    chromeExtension(),
+    chromeExtension(), // https://www.extend-chrome.dev/rollup-plugin#usage
     simpleReloader(),
   ],
 };
