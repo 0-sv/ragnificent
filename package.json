@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "rollup": "^4.24.2",
+    "rollup-plugin-chrome-extension": "^3.6.12"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "type": "module"
+}
