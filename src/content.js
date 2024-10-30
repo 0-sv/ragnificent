@@ -14,7 +14,7 @@ const colors = [
 
 async function analyzeContent() {
   // Get main article content
-  const text = Parser.parse();
+  const text = await Parser.parse(document.location.href);
   console.log(text);
 
   try {
