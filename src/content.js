@@ -1,4 +1,5 @@
 import { Readability } from "readabilitySAX";
+import { saxParser } from "./lib/saxParser.js";
 
 let categories = {};
 const readability = new Readability();
