@@ -27,11 +27,19 @@ async function analyzeContent() {
 
     if (capabilities.available !== "no") {
       const session = await ai.languageModel.create({
-        systemPrompt: `You are an expert at semantic analysis, analyze the given text and identify 5 main semantic categories using this JSON schema:
-        
-        CategoryWithKeywords = {'name': string, 'keywords': string[]}
-        Category = {'category': CategoryWithKeywords}
-        Return: Category[]`,
+        systemPrompt: `
+        You are an expert at semantic analysis, analyze the given text and identify 5 main semantic categories using this JSON schema:
+        1. Provide a clear, concise name
+        2. List 5-10 relevant keywords that appear in the text
+        3. Format response as JSON like: {"categories":[{"name":"category1","keywords":["word1","word2"]}]}
+
+      Example 1:
+      {"categories":[{"name":"Environmental Impact","keywords":["emissions","global warming","pollution","carbon dioxide","greenhouse gases"]},{"name":"Climate Solutions","keywords":["renewable energy","solar","wind power","sustainability","green technology"]},{"name":"Policy & Regulation","keywords":["legislation","paris agreement","carbon tax","regulations","international cooperation"]},{"name":"Economic Factors","keywords":["cost","investment","green economy","carbon market","clean energy funding"]},{"name":"Social Impact","keywords":["public awareness","climate activism","lifestyle changes","education","community action"]}]}
+      Example 2:
+      {"categories":[{"name":"Technical Fundamentals","keywords":["machine learning","neural networks","algorithms","deep learning","data processing"]},{"name":"Applications","keywords":["automation","robotics","natural language processing","computer vision","decision making"]},{"name":"Ethics","keywords":["bias","privacy","transparency","accountability","fairness"]},{"name":"Industry Impact","keywords":["innovation","productivity","disruption","efficiency","transformation"]},{"name":"Social Implications","keywords":["employment","human interaction","education","healthcare","social change"]}]}
+      Example 3:
+      {"categories":[{"name":"Social Media","keywords":["engagement","followers","content strategy","platforms","community management"]},{"name":"Analytics","keywords":["metrics","conversion rate","ROI","data analysis","performance tracking"]},{"name":"Content Marketing","keywords":["blogging","video content","storytelling","SEO","content creation"]},{"name":"Customer Experience","keywords":["personalization","user journey","engagement","feedback","satisfaction"]},{"name":"Campaign Strategy","keywords":["targeting","automation","optimization","scheduling","budget allocation"]}]}
+      `,
       });
 
       const result = await session.prompt(article);
