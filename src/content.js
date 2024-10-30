@@ -17,7 +17,7 @@ const colors = [
 async function analyzeContent() {
   // Get main article content
   const readable = new Readability();
-  readable.setSkipLevel(3);
+  readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
   const article = readable.getArticle();
 
@@ -32,33 +32,33 @@ async function analyzeContent() {
         3. Format response as JSON like: {"categories":[{"name":"category1","keywords":["word1","word2"]}]}`,
       });
 
-      // const result = await session.prompt(text);
-      const result = `
-            
-{
-  "categories": [
-    {
-      "name": "Food and Nutrition",
-      "keywords": ["noodles", "food", "nutrition", "staple food", "shapes", "cooking", "sauces", "soups", "refrigerated", "dried"]
-    },
-    {
-      "name": "Culinary History and Traditions",
-      "keywords": ["Chinese cuisine", "Italian cuisine", "varied", "names", "pasta", "shapes", "cultures", "origin"]
-    },
-    {
-      "name": "Manufacturing Processes",
-      "keywords": ["unleavened dough", "rolled flat", "cut", "stretched", "extruded", "long strips", "strings", "waves", "helices", "tubes", "shells", "folds"]
-    },
-    {
-      "name": "Preparation and Consumption",
-      "keywords": ["boiling water", "cooking oil", "salt", "pan-fried", "deep-fried", "accompanying sauce", "soup", "short-term storage", "future use"]
-    },
-    {
-      "name": "General Characteristics and Properties",
-      "keywords": ["type", "variety", "common", "uncommon", "long", "thin", "thick", "wide", "narrow", "smooth"]
-    }
-  ]
-}`;
+      const result = await session.prompt(article);
+      //       const result = `
+      //
+      // {
+      //   "categories": [
+      //     {
+      //       "name": "Food and Nutrition",
+      //       "keywords": ["noodles", "food", "nutrition", "staple food", "shapes", "cooking", "sauces", "soups", "refrigerated", "dried"]
+      //     },
+      //     {
+      //       "name": "Culinary History and Traditions",
+      //       "keywords": ["Chinese cuisine", "Italian cuisine", "varied", "names", "pasta", "shapes", "cultures", "origin"]
+      //     },
+      //     {
+      //       "name": "Manufacturing Processes",
+      //       "keywords": ["unleavened dough", "rolled flat", "cut", "stretched", "extruded", "long strips", "strings", "waves", "helices", "tubes", "shells", "folds"]
+      //     },
+      //     {
+      //       "name": "Preparation and Consumption",
+      //       "keywords": ["boiling water", "cooking oil", "salt", "pan-fried", "deep-fried", "accompanying sauce", "soup", "short-term storage", "future use"]
+      //     },
+      //     {
+      //       "name": "General Characteristics and Properties",
+      //       "keywords": ["type", "variety", "common", "uncommon", "long", "thin", "thick", "wide", "narrow", "smooth"]
+      //     }
+      //   ]
+      // }`;
       try {
         const analysisResult = JSON.parse(result);
         categories = {};
