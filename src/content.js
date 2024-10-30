@@ -1,4 +1,4 @@
-import { Parser } from "@postlight/parser";
+import Parser from "@postlight/parser";
 
 let categories = {};
 const colors = [
