@@ -1,5 +1,6 @@
 import { Readability } from "readabilitySAX";
 import { saxParser } from "./lib/saxParser.js";
+import TurndownService from 'turndown';
 
 let categories = {};
 const readability = new Readability();
@@ -19,7 +20,11 @@ async function analyzeContent() {
   const readable = new Readability();
   readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
-  const article = readable.getArticle();
+  const htmlArticle = readable.getArticle();
+  
+  // Convert HTML to Markdown
+  const turndownService = new TurndownService();
+  const article = turndownService.turndown(htmlArticle);
 
   try {
     const capabilities = await ai.languageModel.capabilities();
