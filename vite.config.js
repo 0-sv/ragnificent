@@ -3,13 +3,15 @@ import { resolve } from 'path';
 
 export default defineConfig({
   build: {
+    minify: false,
     rollupOptions: {
       input: {
         content: resolve(__dirname, 'src/content.js')
       },
       output: {
         entryFileNames: '[name].js',
-        dir: 'dist'
+        dir: 'dist',
+        format: 'iife'
       }
     }
   }
