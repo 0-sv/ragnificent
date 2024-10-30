@@ -1,4 +1,4 @@
-import { Readability } from 'readabilitySAX';
+import { Readability } from "readabilitySAX";
 
 let categories = {};
 const readability = new Readability();
@@ -15,9 +15,10 @@ const colors = [
 
 async function analyzeContent() {
   // Get main article content
-  const article = readability.parse(document.documentElement.innerHTML);
-  const text = article.textBody;
-  console.log(text);
+  const readable = new Readability();
+  readable.setSkipLevel(3);
+  saxParser(document.childNodes[document.childNodes.length - 1], readable);
+  article = readable.getArticle();
 
   try {
     const capabilities = await ai.languageModel.capabilities();
