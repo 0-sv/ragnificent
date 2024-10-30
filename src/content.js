@@ -1,6 +1,6 @@
 import { Readability } from "readabilitySAX";
 import { saxParser } from "./lib/saxParser.js";
-import TurndownService from 'turndown';
+import TurndownService from "turndown";
 
 let categories = {};
 const readability = new Readability();
@@ -20,21 +20,18 @@ async function analyzeContent() {
   const readable = new Readability();
   readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
-  const htmlArticle = readable.getArticle();
-  
-  // Convert HTML to Markdown
-  const turndownService = new TurndownService();
-  const article = turndownService.turndown(htmlArticle);
+  const article = readable.getArticle("text").text;
 
   try {
     const capabilities = await ai.languageModel.capabilities();
 
     if (capabilities.available !== "no") {
       const session = await ai.languageModel.create({
-        systemPrompt: `You are an expert at semantic analysis. Analyze the given text and identify 3-5 main semantic categories. For each category:
-        1. Provide a clear, concise name
-        2. List 5-10 relevant keywords that appear in the text
-        3. Format response as JSON like: {"categories":[{"name":"category1","keywords":["word1","word2"]}]}`,
+        systemPrompt: `You are an expert at semantic analysis, analyze the given text and identify 5 main semantic categories using this JSON schema:
+        
+        CategoryWithKeywords = {'name': string, 'keywords': string[]}
+        Category = {'category': CategoryWithKeywords}
+        Return: Category[]`,
       });
 
       const result = await session.prompt(article);
