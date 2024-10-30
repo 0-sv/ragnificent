@@ -1,6 +1,7 @@
-import Parser from "@postlight/parser";
+import { Readability } from 'readabilitySAX';
 
 let categories = {};
+const readability = new Readability();
 const colors = [
   "rgba(255, 229, 229, 0.7)",
   "rgba(229, 255, 229, 0.7)",
@@ -14,7 +15,8 @@ const colors = [
 
 async function analyzeContent() {
   // Get main article content
-  const text = await Parser.parse(document.location.href);
+  const article = readability.parse(document.documentElement.innerHTML);
+  const text = article.textBody;
   console.log(text);
 
   try {

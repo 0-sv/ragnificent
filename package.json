@@ -9,6 +9,6 @@
   },
   "type": "module",
   "dependencies": {
-    "url": "^0.11.4"
+    "readabilitySAX": "^1.6.1"
   }
 }
