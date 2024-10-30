@@ -1,6 +1,7 @@
 import { Readability } from "readabilitySAX";
 import { saxParser } from "./lib/saxParser.js";
 import TurndownService from "turndown";
+import { encode } from 'gpt-tokenizer';
 
 let categories = {};
 const readability = new Readability();
@@ -20,7 +21,16 @@ async function analyzeContent() {
   const readable = new Readability();
   readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
-  const article = readable.getArticle("text").text;
+  let article = readable.getArticle("text").text;
+  
+  // Count tokens and truncate if needed
+  const tokens = encode(article);
+  if (tokens.length > 3000) {
+    // Truncate to approximately 3000 tokens by estimating chars per token
+    const charsPerToken = article.length / tokens.length;
+    const targetLength = Math.floor(3000 * charsPerToken);
+    article = article.slice(0, targetLength);
+  }
 
   try {
     const capabilities = await ai.languageModel.capabilities();
