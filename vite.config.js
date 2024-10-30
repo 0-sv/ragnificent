@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import fs from 'fs';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   build: {
@@ -18,6 +19,7 @@ export default defineConfig({
   },
   publicDir: false,
   plugins: [
+    nodePolyfills(),
     {
       name: 'copy-extension-files',
       writeBundle() {
