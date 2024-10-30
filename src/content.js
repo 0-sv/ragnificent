@@ -1,4 +1,4 @@
-import Readability from "./lib/readabilitySAX.js";
+import Parser from "@postlight/parser";
 
 let categories = {};
 const colors = [
@@ -14,9 +14,8 @@ const colors = [
 
 async function analyzeContent() {
   // Get main article content
-  const readable = new Readability(doc, null, 3);
-  const articleNodesl = readable.getArticle(false).getNodes();
-  const articleNodes = new Set(articleNodesl);
+  const text = Parser.parse();
+  console.log(text);
 
   try {
     const capabilities = await ai.languageModel.capabilities();
