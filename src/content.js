@@ -19,7 +19,7 @@ async function analyzeContent() {
   const readable = new Readability();
   readable.setSkipLevel(3);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
-  article = readable.getArticle();
+  const article = readable.getArticle();
 
   try {
     const capabilities = await ai.languageModel.capabilities();
