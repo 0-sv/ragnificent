@@ -3,7 +3,6 @@
   "name": "AI Semantic Highlighter",
   "version": "1.0",
   "description": "Uses Gemini to analyze and highlight semantic categories in articles",
-  "permissions": ["activeTab", "storage"],
   "action": {
     "default_popup": "popup.html"
   },
