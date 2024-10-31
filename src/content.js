@@ -148,20 +148,18 @@ async function analyzeContent() {
 
       try {
         // Combine all results
-        const allCategories = results
-          .map((result, index) => {
-            try {
-              return JSON.parse(result).categories;
-            } catch (error) {
-              console.error("Failed to parse result:", {
-                index,
-                result,
-                error: error.message,
-              });
-              return [];
-            }
-          })
-          .flat();
+        const allCategories = results.map((result, index) => {
+          try {
+            return JSON.parse(result);
+          } catch (error) {
+            console.error("Failed to parse result:", {
+              index,
+              result,
+              error: error.message,
+            });
+            return [];
+          }
+        });
 
         // Merge similar categories and combine their keywords
         const mergedCategories = allCategories.reduce((acc, curr) => {
