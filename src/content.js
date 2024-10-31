@@ -121,7 +121,7 @@ async function analyzeContent() {
     if (capabilities.available !== "no") {
       const session = await ai.languageModel.create({
         systemPrompt: `
-        Your role is semantic classifier of text. 
+        Your role is semantic classifier of text. You receive a paragraph as input and return the JSON as output. 
 
         First example:
         input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
@@ -140,14 +140,20 @@ async function analyzeContent() {
 
       try {
         // Combine all results
-        const allCategories = results.map(result => JSON.parse(result).categories).flat();
-        
+        const allCategories = results
+          .map((result) => JSON.parse(result).categories)
+          .flat();
+
         // Merge similar categories and combine their keywords
         const mergedCategories = allCategories.reduce((acc, curr) => {
-          const existingCategory = acc.find(c => c.name.toLowerCase() === curr.name.toLowerCase());
+          const existingCategory = acc.find(
+            (c) => c.name.toLowerCase() === curr.name.toLowerCase(),
+          );
           if (existingCategory) {
             // Merge keywords, remove duplicates
-            existingCategory.keywords = [...new Set([...existingCategory.keywords, ...curr.keywords])];
+            existingCategory.keywords = [
+              ...new Set([...existingCategory.keywords, ...curr.keywords]),
+            ];
           } else {
             acc.push(curr);
           }
