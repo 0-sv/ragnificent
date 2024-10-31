@@ -94,16 +94,17 @@ async function analyzeContent() {
   readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
   const fullArticle = readable.getArticle("text").text;
-  
+
   // Split into paragraphs and filter empty ones
-  const paragraphs = fullArticle.split(/\n\s*\n/)
-    .filter(para => para.trim().length > 0);
-    
+  const paragraphs = fullArticle
+    .split(/\n\s*\n/)
+    .filter((para) => para.trim().length > 0);
+
   // Process each paragraph, keeping track of total tokens
   const MAX_TOKENS = 3000;
   let totalTokens = 0;
   let processedParagraphs = [];
-  
+
   for (const para of paragraphs) {
     const paraTokens = encode(para);
     if (totalTokens + paraTokens.length <= MAX_TOKENS) {
@@ -113,8 +114,8 @@ async function analyzeContent() {
       break; // Stop if we would exceed token limit
     }
   }
-  
-  const article = processedParagraphs.join('\n\n');
+
+  const article = processedParagraphs.join("\n\n");
 
   try {
     const capabilities = await ai.languageModel.capabilities();
@@ -130,14 +131,10 @@ async function analyzeContent() {
       `,
       });
 
-      // const result = await session.prompt(
-      //   "Classify the following text: '" + article + "'",
-      // );
-      const result = `{"categories":[
-  {"name":"Food and Cooking","keywords":["food","noodles","type","dough","unleavened","rolled","flat","cut","stretched","extruded","long","strips","strings","staple food","cultures","shapes","Chinese cuisine","Italian cuisine","Chinese noodles","Italian noodles","pasta","waves","helices","tubes","strings","shells","folded","other shapes","cooked","boiling water","oil","salt","pan-fried","deep-fried","sauce","soup","refrigerated","dried","stored"]},
-  {"name":"Culture","keywords":["cultures","Chinese cuisine","Italian cuisine"]},
-  {"name":"Science and Technology","keywords":["scientists","renewable energy","emission controls"]},
-  {"name":"General Knowledge","keywords":["global warming","climate change"]}]}`;
+      const result = await session.prompt(
+        "Classify the following text: '" + article + "'",
+      );
+
       try {
         const analysisResult = JSON.parse(result);
         categories = {};
