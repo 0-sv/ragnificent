@@ -3,90 +3,8 @@ import { saxParser } from "./lib/saxParser.js";
 import TurndownService from "turndown";
 import { encode } from "gpt-tokenizer";
 
-let categories = {};
 const readability = new Readability();
-const colors = [
-  "rgba(255, 229, 229, 0.7)",
-  "rgba(229, 255, 229, 0.7)",
-  "rgba(229, 229, 255, 0.7)",
-  "rgba(255, 243, 224, 0.7)",
-  "rgba(224, 247, 250, 0.7)",
-  "rgba(245, 224, 250, 0.7)",
-  "rgba(250, 224, 224, 0.7)",
-  "rgba(224, 250, 245, 0.7)",
-];
 
-function highlightText() {
-  const walker = document.createTreeWalker(
-    document.body,
-    NodeFilter.SHOW_TEXT,
-    null,
-    false,
-  );
-
-  const textNodes = [];
-  let node;
-  while ((node = walker.nextNode())) {
-    textNodes.push(node);
-  }
-
-  // Add Levenshtein Distance function
-  function levenshteinDistance(str1, str2) {
-    const m = str1.length;
-    const n = str2.length;
-    const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
-
-    for (let i = 0; i <= m; i++) dp[i][0] = i;
-    for (let j = 0; j <= n; j++) dp[0][j] = j;
-
-    for (let i = 1; i <= m; i++) {
-      for (let j = 1; j <= n; j++) {
-        if (str1[i - 1] === str2[j - 1]) {
-          dp[i][j] = dp[i - 1][j - 1];
-        } else {
-          dp[i][j] =
-            1 +
-            Math.min(
-              dp[i - 1][j], // deletion
-              dp[i][j - 1], // insertion
-              dp[i - 1][j - 1], // substitution
-            );
-        }
-      }
-    }
-    return dp[m][n];
-  }
-
-  textNodes.forEach((textNode) => {
-    let text = textNode.nodeValue;
-    let words = text.split(/\b/);
-
-    Object.entries(categories).forEach(([category, data]) => {
-      data.keywords.forEach((keyword) => {
-        words.forEach((word, index) => {
-          // Skip empty strings and whitespace
-          if (!word.trim()) return;
-
-          // Calculate similarity
-          const distance = levenshteinDistance(
-            word.toLowerCase(),
-            keyword.toLowerCase(),
-          );
-          const maxLength = Math.max(word.length, keyword.length);
-          const similarity = 1 - distance / maxLength;
-
-          // If similarity is above threshold and not yet modified
-          if (similarity > 0.8) {
-            const span = document.createElement("span");
-            span.className = `semantic-highlight ${data.color}`;
-            span.textContent = text;
-            textNode.parentNode.replaceChild(span, textNode);
-          }
-        });
-      });
-    });
-  });
-}
 
 async function analyzeContent() {
   // Get main article content
@@ -167,30 +85,7 @@ async function analyzeContent() {
         );
 
         console.log("Analysis Result:", JSON.stringify(allCategories, null, 2));
-
-        analysisResult.categories.forEach((category, index) => {
-          categories[category.name] = {
-            keywords: category.keywords,
-            color: `semantic-highlight-${index}`,
-          };
-        });
-
-        // Add dynamic styles
-        let styleSheet = document.createElement("style");
-        Object.entries(categories).forEach(([_, data], index) => {
-          styleSheet.textContent += `
-            .${data.color} {
-              background-color: ${colors[index % colors.length]} !important;
-              padding: 2px 4px;
-              border-radius: 3px;
-              transition: background-color 0.3s;
-            }
-          `;
-        });
-        document.head.appendChild(styleSheet);
-
-        highlightText();
-        return categories;
+        return Array.from(allCategories);
       } catch (e) {
         console.error("Failed to parse AI response:", e);
         return null;
@@ -205,8 +100,8 @@ async function analyzeContent() {
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "analyze") {
-    analyzeContent().then((categories) => {
-      sendResponse({ success: true, categories });
+    analyzeContent().then((results) => {
+      sendResponse({ success: true, results });
     });
     return true;
   } else if (request.action === "reset") {
