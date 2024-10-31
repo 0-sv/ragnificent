@@ -128,12 +128,12 @@ async function analyzeContent() {
         First example:
         input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
         output: {"categories":[{"name":"Environmental Threats","keywords":["global warming","sea levels","climate change","extreme weather","emissions"]},{"name":"Green Solutions","keywords":["renewable energy","solar","wind power","emissions controls","scientists"]}]}
+        
+        Classify the following text:
       `,
       });
 
-      const result = await session.prompt(
-        "Classify the following text: '" + article + "'",
-      );
+      const result = await session.prompt(article);
 
       try {
         const analysisResult = JSON.parse(result);
