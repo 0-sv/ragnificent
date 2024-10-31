@@ -138,7 +138,7 @@ async function analyzeContent() {
           const result = await session.prompt(para);
           results.push(result);
         } catch (error) {
-          console.error('Failed to process paragraph:', error);
+          console.error("Failed to process paragraph :", error);
           continue;
         }
       }
