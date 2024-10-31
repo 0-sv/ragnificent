@@ -134,8 +134,13 @@ async function analyzeContent() {
       // Process paragraphs sequentially
       const results = [];
       for (const para of processedParagraphs) {
-        const result = await session.prompt(para);
-        results.push(result);
+        try {
+          const result = await session.prompt(para);
+          results.push(result);
+        } catch (error) {
+          console.error('Failed to process paragraph:', error);
+          continue;
+        }
       }
 
       try {
