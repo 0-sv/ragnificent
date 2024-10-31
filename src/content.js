@@ -146,7 +146,18 @@ async function analyzeContent() {
       try {
         // Combine all results
         const allCategories = results
-          .map((result) => JSON.parse(result).categories)
+          .map((result, index) => {
+            try {
+              return JSON.parse(result).categories;
+            } catch (error) {
+              console.error('Failed to parse result:', {
+                index,
+                result,
+                error: error.message
+              });
+              return [];
+            }
+          })
           .flat();
 
         // Merge similar categories and combine their keywords
