@@ -131,10 +131,12 @@ async function analyzeContent() {
       `,
       });
 
-      // Process each paragraph individually
-      const results = await Promise.all(
-        processedParagraphs.map(para => session.prompt(para))
-      );
+      // Process paragraphs sequentially
+      const results = [];
+      for (const para of processedParagraphs) {
+        const result = await session.prompt(para);
+        results.push(result);
+      }
 
       try {
         // Combine all results
