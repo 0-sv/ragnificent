@@ -121,13 +121,16 @@ async function analyzeContent() {
     if (capabilities.available !== "no") {
       const session = await ai.languageModel.create({
         systemPrompt: `
-        Your role is semantic classifier of text. You receive a paragraph as input and return the JSON as output as a plain JSON without any extra escaping.
+        Your role is semantic classifier of text. You receive a paragraph as input and return JSON array.
 
         First example:
         input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
-        output: '{"categories":[{"name":"Environmental Threats","keywords":["global warming","sea levels","climate change","extreme weather","emissions"]},{"name":"Green Solutions","keywords":["renewable energy","solar","wind power","emissions controls","scientists"]}]}'
+        output: '["global warming","climate change"]'
         
-        Classify the following paragraph:
+        Second example:
+        input: "Machine learning algorithms are revolutionizing business operations. Companies are using AI to automate tasks and analyze large datasets. However, concerns about data privacy and algorithmic bias remain major challenges that need to be addressed."
+        output: '["machine learning", "ai"]'
+        Classify the following paragraph, ONLY PICK THE TWO MOST RELEVANT KEYWORDS:
       `,
       });
 
@@ -177,7 +180,10 @@ async function analyzeContent() {
         }, []);
 
         const analysisResult = { categories: mergedCategories };
-        console.log('Analysis Result:', JSON.stringify(analysisResult, null, 2));
+        console.log(
+          "Analysis Result:",
+          JSON.stringify(analysisResult, null, 2),
+        );
         categories = {};
 
         analysisResult.categories.forEach((category, index) => {
