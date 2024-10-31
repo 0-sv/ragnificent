@@ -147,8 +147,8 @@ async function analyzeContent() {
       }
 
       try {
-        // Combine all results
-        const allCategories = results.map((result, index) => {
+        // Combine and flatten all results
+        const allCategories = results.flatMap((result, index) => {
           try {
             return JSON.parse(result);
           } catch (error) {
@@ -161,21 +161,11 @@ async function analyzeContent() {
           }
         });
 
-        // Merge similar categories and combine their keywords
-        const mergedCategories = allCategories.reduce((acc, curr) => {
-          const existingCategory = acc.find(
-            (c) => c.name.toLowerCase() === curr.name.toLowerCase(),
-          );
-          if (existingCategory) {
-            // Merge keywords, remove duplicates
-            existingCategory.keywords = [
-              ...new Set([...existingCategory.keywords, ...curr.keywords]),
-            ];
-          } else {
-            acc.push(curr);
-          }
-          return acc;
-        }, []);
+        // Convert to category objects and merge duplicates
+        const mergedCategories = Array.from(new Set(allCategories)).map(category => ({
+          name: category,
+          keywords: [category]
+        }));
 
         const analysisResult = { categories: mergedCategories };
         console.log(
