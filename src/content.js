@@ -121,15 +121,16 @@ async function analyzeContent() {
     if (capabilities.available !== "no") {
       const session = await ai.languageModel.create({
         systemPrompt: `
-        Your role is semantic classifier of text. You receive a paragraph as input and return JSON array.
+        Your role is breaking down text into key subtexts. You receive a paragraph as input and return JSON array.
 
         First example:
         input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
-        output: '["global warming","climate change"]'
+        output: '["Environmental Threat","Observable Evidence","Scientific Urgency","Renewable Energy Solutions","Ongoing Challenges"]'
         
         Second example:
         input: "Machine learning algorithms are revolutionizing business operations. Companies are using AI to automate tasks and analyze large datasets. However, concerns about data privacy and algorithmic bias remain major challenges that need to be addressed."
-        output: '["machine learning", "ai"]'
+        output: '["Technological Revolution","Business Transformation","Automation and Analytics","Ethical Challenges","Data Privacy Concerns"]
+
         Classify the following paragraph, ONLY PICK THE TWO MOST RELEVANT KEYWORDS:
       `,
       });
@@ -148,31 +149,24 @@ async function analyzeContent() {
 
       try {
         // Combine and flatten all results
-        const allCategories = results.flatMap((result, index) => {
-          try {
-            return JSON.parse(result);
-          } catch (error) {
-            console.error("Failed to parse result:", {
-              index,
-              result,
-              error: error.message,
-            });
-            return [];
-          }
-        });
-
-        // Convert to category objects and merge duplicates
-        const mergedCategories = Array.from(new Set(allCategories)).map(category => ({
-          name: category,
-          keywords: [category]
-        }));
-
-        const analysisResult = { categories: mergedCategories };
-        console.log(
-          "Analysis Result:",
-          JSON.stringify(analysisResult, null, 2),
+        const allCategories = new Set(
+          results
+            .flatMap((result, index) => {
+              try {
+                return JSON.parse(result);
+              } catch (error) {
+                console.error("Failed to parse result:", {
+                  index,
+                  result,
+                  error: error.message,
+                });
+                return [];
+              }
+            })
+            .flat(),
         );
-        categories = {};
+
+        console.log("Analysis Result:", JSON.stringify(allCategories, null, 2));
 
         analysisResult.categories.forEach((category, index) => {
           categories[category.name] = {
