@@ -177,6 +177,7 @@ async function analyzeContent() {
         }, []);
 
         const analysisResult = { categories: mergedCategories };
+        console.log('Analysis Result:', JSON.stringify(analysisResult, null, 2));
         categories = {};
 
         analysisResult.categories.forEach((category, index) => {
