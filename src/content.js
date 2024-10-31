@@ -121,11 +121,11 @@ async function analyzeContent() {
     if (capabilities.available !== "no") {
       const session = await ai.languageModel.create({
         systemPrompt: `
-        Your role is semantic classifier of text. You receive a paragraph as input and return the JSON as output. 
+        Your role is semantic classifier of text. You receive a paragraph as input and return the JSON as output as a plain JSON without any extra escaping.
 
         First example:
         input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
-        output: {"categories":[{"name":"Environmental Threats","keywords":["global warming","sea levels","climate change","extreme weather","emissions"]},{"name":"Green Solutions","keywords":["renewable energy","solar","wind power","emissions controls","scientists"]}]}
+        output: '{"categories":[{"name":"Environmental Threats","keywords":["global warming","sea levels","climate change","extreme weather","emissions"]},{"name":"Green Solutions","keywords":["renewable energy","solar","wind power","emissions controls","scientists"]}]}'
         
         Classify the following paragraph:
       `,
@@ -150,10 +150,10 @@ async function analyzeContent() {
             try {
               return JSON.parse(result).categories;
             } catch (error) {
-              console.error('Failed to parse result:', {
+              console.error("Failed to parse result:", {
                 index,
                 result,
-                error: error.message
+                error: error.message,
               });
               return [];
             }
