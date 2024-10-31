@@ -115,8 +115,6 @@ async function analyzeContent() {
     }
   }
 
-  const article = processedParagraphs.join("\n\n");
-
   try {
     const capabilities = await ai.languageModel.capabilities();
 
@@ -129,14 +127,32 @@ async function analyzeContent() {
         input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
         output: {"categories":[{"name":"Environmental Threats","keywords":["global warming","sea levels","climate change","extreme weather","emissions"]},{"name":"Green Solutions","keywords":["renewable energy","solar","wind power","emissions controls","scientists"]}]}
         
-        Classify the following text:
+        Classify the following paragraph:
       `,
       });
 
-      const result = await session.prompt(article);
+      // Process each paragraph individually
+      const results = await Promise.all(
+        processedParagraphs.map(para => session.prompt(para))
+      );
 
       try {
-        const analysisResult = JSON.parse(result);
+        // Combine all results
+        const allCategories = results.map(result => JSON.parse(result).categories).flat();
+        
+        // Merge similar categories and combine their keywords
+        const mergedCategories = allCategories.reduce((acc, curr) => {
+          const existingCategory = acc.find(c => c.name.toLowerCase() === curr.name.toLowerCase());
+          if (existingCategory) {
+            // Merge keywords, remove duplicates
+            existingCategory.keywords = [...new Set([...existingCategory.keywords, ...curr.keywords])];
+          } else {
+            acc.push(curr);
+          }
+          return acc;
+        }, []);
+
+        const analysisResult = { categories: mergedCategories };
         categories = {};
 
         analysisResult.categories.forEach((category, index) => {
