@@ -21,39 +21,16 @@ async function analyzeContent() {
 
         if (capabilities.available !== "no") {
             const session = await ai.languageModel.create({
-                systemPrompt: `You are an expert at semantic analysis. Analyze the given text and identify 3-5 main semantic categories. For each category:
-        1. Provide a clear, concise name
-        2. List 5-10 relevant keywords that appear in the text
-        3. Format response as JSON like: {"categories":[{"name":"category1","keywords":["word1","word2"]}]}`
+                systemPrompt: `Your role is semantic classifier of text. 
+
+                First example:
+                input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
+                output: {"categories":[{"name":"Environmental Threats","keywords":["global warming","sea levels","climate change","extreme weather","emissions"]},{"name":"Green Solutions","keywords":["renewable energy","solar","wind power","emissions controls","scientists"]}]}
+                
+                Classify the following text:`
             });
 
-            // const result = await session.prompt(text);
-            const result = `
-            
-{
-  "categories": [
-    {
-      "name": "Food and Nutrition",
-      "keywords": ["noodles", "food", "nutrition", "staple food", "shapes", "cooking", "sauces", "soups", "refrigerated", "dried"]
-    },
-    {
-      "name": "Culinary History and Traditions",
-      "keywords": ["Chinese cuisine", "Italian cuisine", "varied", "names", "pasta", "shapes", "cultures", "origin"]
-    },
-    {
-      "name": "Manufacturing Processes",
-      "keywords": ["unleavened dough", "rolled flat", "cut", "stretched", "extruded", "long strips", "strings", "waves", "helices", "tubes", "shells", "folds"]
-    },
-    {
-      "name": "Preparation and Consumption",
-      "keywords": ["boiling water", "cooking oil", "salt", "pan-fried", "deep-fried", "accompanying sauce", "soup", "short-term storage", "future use"]
-    },
-    {
-      "name": "General Characteristics and Properties",
-      "keywords": ["type", "variety", "common", "uncommon", "long", "thin", "thick", "wide", "narrow", "smooth"]
-    }
-  ]
-}`
+            const result = await session.prompt(text);
             try {
                 const analysisResult = JSON.parse(result);
                 categories = {};
