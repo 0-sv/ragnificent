@@ -93,16 +93,28 @@ async function analyzeContent() {
   const readable = new Readability();
   readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
-  let article = readable.getArticle("text").text;
-
-  // Count tokens and truncate if needed
-  const tokens = encode(article);
-  if (tokens.length > 1000) {
-    // Truncate to approximately 3000 tokens by estimating chars per token
-    const charsPerToken = article.length / tokens.length;
-    const targetLength = Math.floor(3000 * charsPerToken);
-    article = article.slice(0, targetLength);
+  const fullArticle = readable.getArticle("text").text;
+  
+  // Split into paragraphs and filter empty ones
+  const paragraphs = fullArticle.split(/\n\s*\n/)
+    .filter(para => para.trim().length > 0);
+    
+  // Process each paragraph, keeping track of total tokens
+  const MAX_TOKENS = 3000;
+  let totalTokens = 0;
+  let processedParagraphs = [];
+  
+  for (const para of paragraphs) {
+    const paraTokens = encode(para);
+    if (totalTokens + paraTokens.length <= MAX_TOKENS) {
+      processedParagraphs.push(para);
+      totalTokens += paraTokens.length;
+    } else {
+      break; // Stop if we would exceed token limit
+    }
   }
+  
+  const article = processedParagraphs.join('\n\n');
 
   try {
     const capabilities = await ai.languageModel.capabilities();
