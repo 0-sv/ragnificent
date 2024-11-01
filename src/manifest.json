@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "AI Semantic Highlighter",
-  "version": "1.0",
-  "description": "Uses Gemini to analyze and highlight semantic categories in articles",
+  "name": "RAGnificent",
+  "version": "v0.1",
+  "description": "Query any webpage for fast results with on-device AI.",
   "action": {
     "default_popup": "popup.html"
   },
