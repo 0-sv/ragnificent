@@ -23,8 +23,8 @@ async function analyzeContent() {
   const bm25 = new BM25();
   bm25.addDocuments(paragraphs);
   
-  // Search for relevant paragraphs (dummy query for now)
-  const query = "noodles";
+  // Get query from user (this should be passed in from UI later)
+  const query = "What are the main points about this topic?";
   const relevantIndices = bm25.search(query, 2); // Get top 2 most relevant paragraphs
   const relevantText = relevantIndices
     .map(idx => paragraphs[idx])
@@ -42,19 +42,18 @@ async function analyzeContent() {
 
     if (capabilities.available !== "no") {
       const session = await ai.languageModel.create({
-        systemPrompt: `
-        Your role is breaking down text into key subtexts. You receive a paragraph as input and return JSON array.
-
-        First example:
-        input: "Global warming continues to threaten our planet. Rising sea levels and extreme weather events are clear signs of climate change. Scientists emphasize the urgent need for renewable energy solutions and stricter emissions controls. Solar and wind power adoption is growing, but greenhouse gas emissions remain a major concern."
-        output: '["Environmental Threat","Observable Evidence","Scientific Urgency","Renewable Energy Solutions","Ongoing Challenges"]'
+        systemPrompt: `You are a helpful AI assistant that answers questions about text content.
         
-        Second example:
-        input: "Machine learning algorithms are revolutionizing business operations. Companies are using AI to automate tasks and analyze large datasets. However, concerns about data privacy and algorithmic bias remain major challenges that need to be addressed."
-        output: '["Technological Revolution","Business Transformation","Automation and Analytics","Ethical Challenges","Data Privacy Concerns"]
-
-        Classify the following paragraph, ONLY PICK THE TWO MOST RELEVANT KEYWORDS:
-      `,
+        Below is a relevant excerpt from an article. Please answer the following question about it:
+        
+        Question: ${query}
+        
+        Article excerpt:
+        ${relevantText}
+        
+        Provide a clear, concise answer based only on the information given in the text.
+        Format your response as a JSON array of key points, with 2-3 main points maximum.
+        Each point should be a complete, informative statement.`,
       });
 
       try {
