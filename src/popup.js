@@ -10,11 +10,11 @@ const colors = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  const statusDiv = document.getElementById("status");
-  const categoriesDiv = document.getElementById("categories");
+  const statusDiv = document.getElementById("rag-status");
+  const categoriesDiv = document.getElementById("rag-categories");
 
-  document.getElementById("analyze").addEventListener("click", () => {
-    const queryInput = document.getElementById("query");
+  document.getElementById("rag-analyze").addEventListener("click", () => {
+    const queryInput = document.getElementById("rag-query");
     const query = queryInput.value.trim();
     
     if (!query) {
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Display response text
           categoriesDiv.innerHTML = "";
           const responseDiv = document.createElement("div");
-          responseDiv.className = "response-text";
+          responseDiv.className = "rag-response-text";
           responseDiv.textContent = response.results || "No response received.";
           categoriesDiv.appendChild(responseDiv);
         } else {
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  document.getElementById("reset").addEventListener("click", () => {
+  document.getElementById("rag-reset").addEventListener("click", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { action: "reset" });
     });
