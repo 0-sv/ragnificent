@@ -22,14 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    statusDiv.textContent = "Analyzing content...";
+    statusDiv.innerHTML = '<div class="loading"></div>';
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { 
         action: "analyze",
         query: query 
       }, (response) => {
         if (response && response.success) {
-          statusDiv.textContent = "Analysis complete!";
+          statusDiv.innerHTML = "";
 
           // Display response text
           categoriesDiv.innerHTML = "";
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
           responseDiv.textContent = response.results || "No response received.";
           categoriesDiv.appendChild(responseDiv);
         } else {
-          statusDiv.textContent = "Analysis failed. Please try again.";
+          statusDiv.innerHTML = "Analysis failed. Please try again.";
         }
       });
     });

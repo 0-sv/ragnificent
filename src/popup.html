@@ -3,34 +3,108 @@
   <head>
     <style>
       body {
-        width: 300px;
-        padding: 10px;
+        width: 350px;
+        padding: 20px;
+        background-color: #0a0a0a;
+        color: #e6c6a8;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      h3 {
+        color: #e6c6a8;
+        margin-top: 0;
+        font-size: 1.8em;
+        font-weight: normal;
+        letter-spacing: 0.5px;
+      }
+      #query {
+        width: 100%;
+        padding: 8px 12px;
+        margin-bottom: 15px;
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 4px;
+        color: #e6c6a8;
+        font-size: 14px;
+      }
+      #query:focus {
+        outline: none;
+        border-color: #e6c6a8;
+      }
+      button {
+        background-color: #e6c6a8;
+        color: #0a0a0a;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+        width: 100%;
+      }
+      button:hover {
+        background-color: #d4b190;
+      }
+      #reset {
+        background-color: transparent;
+        border: 1px solid #e6c6a8;
+        color: #e6c6a8;
+      }
+      #reset:hover {
+        background-color: rgba(230, 198, 168, 0.1);
       }
       #categories {
-        margin-top: 10px;
+        margin-top: 15px;
+        background-color: #1a1a1a;
+        border-radius: 4px;
+        padding: 12px;
       }
-      .category {
-        margin: 5px 0;
-        display: flex;
-        align-items: center;
-      }
-      .color-preview {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-        border-radius: 3px;
+      .response-text {
+        line-height: 1.5;
+        white-space: pre-wrap;
       }
       #status {
-        margin-top: 10px;
+        margin-top: 12px;
         font-style: italic;
+        color: #888;
+        font-size: 14px;
+      }
+      .loading {
+        width: 100%;
+        height: 3px;
+        background-color: #1a1a1a;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-top: 12px;
+      }
+      .loading::after {
+        content: '';
+        display: block;
+        width: 40%;
+        height: 100%;
+        background-color: #e6c6a8;
+        animation: loading 1s infinite ease-in-out;
+        border-radius: 2px;
+      }
+      @keyframes loading {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(250%);
+        }
       }
     </style>
   </head>
   <body>
-    <h3>AI Semantic Highlighter</h3>
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h3 style="margin-bottom: 5px;">RAGnificent</h3>
+      <div style="color: #888; font-size: 12px;">Query any webpage for fast results with on-device AI</div>
+    </div>
     <input type="text" id="query" placeholder="Ask a question about the article..." style="width: 100%; margin-bottom: 10px; padding: 5px;">
-    <button id="analyze">Ask Question</button>
-    <button id="reset">Reset</button>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <button id="analyze">Ask Question</button>
+      <button id="reset">Reset</button>
+    </div>
     <div id="status"></div>
     <div id="categories"></div>
     <script src="popup.js"></script>
