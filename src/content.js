@@ -6,28 +6,27 @@ import BM25 from "./lib/bm25.js";
 
 const readability = new Readability();
 
-
 async function analyzeContent() {
   // Get main article content
   const readable = new Readability();
   readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
   const fullArticle = readable.getArticle("text").text;
-  
+
   // Split article into paragraphs for BM25
   const paragraphs = fullArticle
     .split(/\n\s*\n/)
-    .filter(para => para.trim().length > 0);
-  
+    .filter((para) => para.trim().length > 0);
+
   // Initialize BM25 with paragraphs
   const bm25 = new BM25();
   bm25.addDocuments(paragraphs);
-  
+
   // Get query from user (this should be passed in from UI later)
-  const query = "What are the main points about this topic?";
+  const query = "What are noodles?";
   const relevantIndices = bm25.search(query, 2); // Get top 2 most relevant paragraphs
   const relevantText = relevantIndices
-    .map(idx => paragraphs[idx])
+    .map((idx) => paragraphs[idx])
     .join("\n\n");
 
   try {
@@ -35,9 +34,11 @@ async function analyzeContent() {
     const MAX_TOKENS = 3000;
     const tokens = encode(relevantText);
     if (tokens.length > MAX_TOKENS) {
-      console.warn("Article exceeds maximum token length, it will be truncated");
+      console.warn(
+        "Article exceeds maximum token length, it will be truncated",
+      );
     }
-    
+
     const capabilities = await ai.languageModel.capabilities();
 
     if (capabilities.available !== "no") {
@@ -51,21 +52,12 @@ async function analyzeContent() {
         Article excerpt:
         ${relevantText}
         
-        Provide a clear, concise answer based only on the information given in the text.
-        Format your response as a JSON array of key points, with 2-3 main points maximum.
-        Each point should be a complete, informative statement.`,
+        Provide a clear, concise answer based only on the information given in the text.`,
       });
 
       try {
         const result = await session.prompt(relevantText);
-        try {
-          const categories = JSON.parse(result);
-          console.log("Analysis Result:", JSON.stringify(categories, null, 2));
-          return categories;
-        } catch (error) {
-          console.error("Failed to parse AI response:", error);
-          return null;
-        }
+        return result;
       } catch (e) {
         console.error("Failed to parse AI response:", e);
         return null;
