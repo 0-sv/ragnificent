@@ -13,27 +13,14 @@ async function analyzeContent() {
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
   const fullArticle = readable.getArticle("text").text;
 
-  // Split into paragraphs and filter empty ones
-  const paragraphs = fullArticle
-    .split(/\n\s*\n/)
-    .filter((para) => para.trim().length > 0);
-
-  // Process each paragraph, keeping track of total tokens
-  const MAX_TOKENS = 3000;
-  let totalTokens = 0;
-  let processedParagraphs = [];
-
-  for (const para of paragraphs) {
-    const paraTokens = encode(para);
-    if (totalTokens + paraTokens.length <= MAX_TOKENS) {
-      processedParagraphs.push(para);
-      totalTokens += paraTokens.length;
-    } else {
-      break; // Stop if we would exceed token limit
-    }
-  }
-
   try {
+    // Check token count of full article
+    const MAX_TOKENS = 3000;
+    const tokens = encode(fullArticle);
+    if (tokens.length > MAX_TOKENS) {
+      console.warn("Article exceeds maximum token length, it will be truncated");
+    }
+    
     const capabilities = await ai.languageModel.capabilities();
 
     if (capabilities.available !== "no") {
@@ -53,39 +40,16 @@ async function analyzeContent() {
       `,
       });
 
-      // Process paragraphs sequentially
-      const results = [];
-      for (const para of processedParagraphs) {
-        try {
-          const result = await session.prompt(para);
-          results.push(result);
-        } catch (error) {
-          console.error("Failed to process paragraph :", error);
-          continue;
-        }
-      }
-
       try {
-        // Combine and flatten all results
-        const allCategories = new Set(
-          results
-            .flatMap((result, index) => {
-              try {
-                return JSON.parse(result);
-              } catch (error) {
-                console.error("Failed to parse result:", {
-                  index,
-                  result,
-                  error: error.message,
-                });
-                return [];
-              }
-            })
-            .flat(),
-        );
-
-        console.log("Analysis Result:", JSON.stringify(allCategories, null, 2));
-        return Array.from(allCategories);
+        const result = await session.prompt(fullArticle);
+        try {
+          const categories = JSON.parse(result);
+          console.log("Analysis Result:", JSON.stringify(categories, null, 2));
+          return categories;
+        } catch (error) {
+          console.error("Failed to parse AI response:", error);
+          return null;
+        }
       } catch (e) {
         console.error("Failed to parse AI response:", e);
         return null;
