@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "RAGnificent",
-  "version": "v0.1",
+  "version": "0.1",
   "description": "Query any webpage for fast results with on-device AI.",
   "action": {
     "default_popup": "popup.html"
