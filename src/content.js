@@ -2,6 +2,7 @@ import { Readability } from "readabilitySAX";
 import { saxParser } from "./lib/saxParser.js";
 import TurndownService from "turndown";
 import { encode } from "gpt-tokenizer";
+import BM25 from "./lib/bm25.js";
 
 const readability = new Readability();
 
@@ -12,11 +13,27 @@ async function analyzeContent() {
   readable.setSkipLevel(0);
   saxParser(document.childNodes[document.childNodes.length - 1], readable);
   const fullArticle = readable.getArticle("text").text;
+  
+  // Split article into paragraphs for BM25
+  const paragraphs = fullArticle
+    .split(/\n\s*\n/)
+    .filter(para => para.trim().length > 0);
+  
+  // Initialize BM25 with paragraphs
+  const bm25 = new BM25();
+  bm25.addDocuments(paragraphs);
+  
+  // Search for relevant paragraphs (dummy query for now)
+  const query = "noodles";
+  const relevantIndices = bm25.search(query, 2); // Get top 2 most relevant paragraphs
+  const relevantText = relevantIndices
+    .map(idx => paragraphs[idx])
+    .join("\n\n");
 
   try {
     // Check token count of full article
     const MAX_TOKENS = 3000;
-    const tokens = encode(fullArticle);
+    const tokens = encode(relevantText);
     if (tokens.length > MAX_TOKENS) {
       console.warn("Article exceeds maximum token length, it will be truncated");
     }
@@ -41,7 +58,7 @@ async function analyzeContent() {
       });
 
       try {
-        const result = await session.prompt(fullArticle);
+        const result = await session.prompt(relevantText);
         try {
           const categories = JSON.parse(result);
           console.log("Analysis Result:", JSON.stringify(categories, null, 2));
