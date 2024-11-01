@@ -69,12 +69,12 @@ async function analyzeContent(query) {
 
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "rag-analyze") {
+  if (request.action === "analyze") {
     analyzeContent(request.query).then((results) => {
       sendResponse({ success: true, results });
     });
     return true;
-  } else if (request.action === "rag-reset") {
+  } else if (request.action === "reset") {
     location.reload();
     sendResponse({ success: true });
   }
