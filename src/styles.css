@@ -1,6 +1,10 @@
 /* styles.css */
 
 /* Popup Styles */
+* {
+  box-sizing: border-box;
+}
+
 body {
   width: 350px;
   padding: 20px;
@@ -19,7 +23,7 @@ h3 {
 
 #query {
   width: 100%;
-  padding: 8px 12px;
+  padding: 8px;
   margin-bottom: 15px;
   background-color: #1a1a1a;
   border: 1px solid #333;
@@ -126,6 +130,8 @@ button:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+  margin: 0;
+  padding: 0;
 }
 
 /* Base highlight class */
