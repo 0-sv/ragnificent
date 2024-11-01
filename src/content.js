@@ -22,8 +22,6 @@ async function analyzeContent(query) {
   const bm25 = new BM25();
   bm25.addDocuments(paragraphs);
 
-  // Get query from request
-  const query = request.query;
   const relevantIndices = bm25.search(query, 2); // Get top 2 most relevant paragraphs
   const relevantText = relevantIndices
     .map((idx) => paragraphs[idx])
