@@ -38,6 +38,7 @@
         cursor: pointer;
         font-size: 14px;
         transition: background-color 0.2s;
+        width: 100%;
       }
       button:hover {
         background-color: #d4b190;
@@ -46,7 +47,6 @@
         background-color: transparent;
         border: 1px solid #e6c6a8;
         color: #e6c6a8;
-        margin-left: 8px;
       }
       #reset:hover {
         background-color: rgba(230, 198, 168, 0.1);
@@ -72,8 +72,10 @@
   <body>
     <h3>AI Semantic Highlighter</h3>
     <input type="text" id="query" placeholder="Ask a question about the article..." style="width: 100%; margin-bottom: 10px; padding: 5px;">
-    <button id="analyze">Ask Question</button>
-    <button id="reset">Reset</button>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <button id="analyze">Ask Question</button>
+      <button id="reset">Reset</button>
+    </div>
     <div id="status"></div>
     <div id="categories"></div>
     <script src="popup.js"></script>
