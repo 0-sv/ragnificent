@@ -3,26 +3,69 @@
   <head>
     <style>
       body {
-        width: 300px;
-        padding: 10px;
+        width: 350px;
+        padding: 20px;
+        background-color: #0a0a0a;
+        color: #e6c6a8;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      h3 {
+        color: #e6c6a8;
+        margin-top: 0;
+        font-size: 1.5em;
+        font-weight: normal;
+      }
+      #query {
+        width: 100%;
+        padding: 8px 12px;
+        margin-bottom: 15px;
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 4px;
+        color: #e6c6a8;
+        font-size: 14px;
+      }
+      #query:focus {
+        outline: none;
+        border-color: #e6c6a8;
+      }
+      button {
+        background-color: #e6c6a8;
+        color: #0a0a0a;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+      }
+      button:hover {
+        background-color: #d4b190;
+      }
+      #reset {
+        background-color: transparent;
+        border: 1px solid #e6c6a8;
+        color: #e6c6a8;
+        margin-left: 8px;
+      }
+      #reset:hover {
+        background-color: rgba(230, 198, 168, 0.1);
       }
       #categories {
-        margin-top: 10px;
+        margin-top: 15px;
+        background-color: #1a1a1a;
+        border-radius: 4px;
+        padding: 12px;
       }
-      .category {
-        margin: 5px 0;
-        display: flex;
-        align-items: center;
-      }
-      .color-preview {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-        border-radius: 3px;
+      .response-text {
+        line-height: 1.5;
+        white-space: pre-wrap;
       }
       #status {
-        margin-top: 10px;
+        margin-top: 12px;
         font-style: italic;
+        color: #888;
+        font-size: 14px;
       }
     </style>
   </head>
