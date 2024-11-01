@@ -14,9 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoriesDiv = document.getElementById("categories");
 
   document.getElementById("analyze").addEventListener("click", () => {
+    const queryInput = document.getElementById("query");
+    const query = queryInput.value.trim();
+    
+    if (!query) {
+      statusDiv.textContent = "Please enter a question first";
+      return;
+    }
+
     statusDiv.textContent = "Analyzing content...";
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { action: "analyze" }, (response) => {
+      chrome.tabs.sendMessage(tabs[0].id, { 
+        action: "analyze",
+        query: query 
+      }, (response) => {
         if (response && response.success) {
           statusDiv.textContent = "Analysis complete!";
 

@@ -6,7 +6,7 @@ import BM25 from "./lib/bm25.js";
 
 const readability = new Readability();
 
-async function analyzeContent() {
+async function analyzeContent(query) {
   // Get main article content
   const readable = new Readability();
   readable.setSkipLevel(0);
@@ -22,8 +22,8 @@ async function analyzeContent() {
   const bm25 = new BM25();
   bm25.addDocuments(paragraphs);
 
-  // Get query from user (this should be passed in from UI later)
-  const query = "What are noodles?";
+  // Get query from request
+  const query = request.query;
   const relevantIndices = bm25.search(query, 2); // Get top 2 most relevant paragraphs
   const relevantText = relevantIndices
     .map((idx) => paragraphs[idx])
@@ -72,7 +72,7 @@ async function analyzeContent() {
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "analyze") {
-    analyzeContent().then((results) => {
+    analyzeContent(request.query).then((results) => {
       sendResponse({ success: true, results });
     });
     return true;
