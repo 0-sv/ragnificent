@@ -12,8 +12,9 @@
       h3 {
         color: #e6c6a8;
         margin-top: 0;
-        font-size: 1.5em;
+        font-size: 1.8em;
         font-weight: normal;
+        letter-spacing: 0.5px;
       }
       #query {
         width: 100%;
@@ -70,7 +71,10 @@
     </style>
   </head>
   <body>
-    <h3>AI Semantic Highlighter</h3>
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h3 style="margin-bottom: 5px;">RAGnificent</h3>
+      <div style="color: #888; font-size: 12px;">Query any webpage for fast results with on-device AI</div>
+    </div>
     <input type="text" id="query" placeholder="Ask a question about the article..." style="width: 100%; margin-bottom: 10px; padding: 5px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
       <button id="analyze">Ask Question</button>
