@@ -10,18 +10,27 @@ const colors = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  const statusDiv = document.getElementById("rag-status");
-  const categoriesDiv = document.getElementById("rag-categories");
-
   document.getElementById("rag-analyze").addEventListener("click", () => {
     const queryInput = document.getElementById("rag-query");
     const query = queryInput.value.trim();
 
     if (!query) {
+      let statusDiv = document.getElementById("rag-status");
+      if (!statusDiv) {
+        statusDiv = document.createElement("div");
+        statusDiv.id = "rag-status";
+        document.body.appendChild(statusDiv);
+      }
       statusDiv.textContent = "Please enter a question first";
       return;
     }
 
+    let statusDiv = document.getElementById("rag-status");
+    if (!statusDiv) {
+      statusDiv = document.createElement("div");
+      statusDiv.id = "rag-status";
+      document.body.appendChild(statusDiv);
+    }
     statusDiv.innerHTML = '<div class="rag-loading"></div>';
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(
@@ -32,16 +41,27 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         (response) => {
           if (response && response.success) {
-            statusDiv.innerHTML = "";
+            // Clear existing elements
+            const existingStatus = document.getElementById("rag-status");
+            if (existingStatus) existingStatus.remove();
+            const existingCategories = document.getElementById("rag-categories");
+            if (existingCategories) existingCategories.remove();
 
-            // Display response text
-            categoriesDiv.innerHTML = "";
+            // Create and add categories div with response
+            const categoriesDiv = document.createElement("div");
+            categoriesDiv.id = "rag-categories";
             const responseDiv = document.createElement("div");
             responseDiv.className = "rag-response-text";
-            responseDiv.textContent =
-              response.results || "No response received.";
+            responseDiv.textContent = response.results || "No response received.";
             categoriesDiv.appendChild(responseDiv);
+            document.body.appendChild(categoriesDiv);
           } else {
+            let statusDiv = document.getElementById("rag-status");
+            if (!statusDiv) {
+              statusDiv = document.createElement("div");
+              statusDiv.id = "rag-status";
+              document.body.appendChild(statusDiv);
+            }
             statusDiv.innerHTML = "Analysis failed. Please try again.";
           }
         },
