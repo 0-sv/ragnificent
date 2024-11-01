@@ -37,7 +37,7 @@
   border-color: #e6c6a8;
 }
 
-button {
+.rag-button {
   background-color: #e6c6a8;
   color: #0a0a0a;
   border: none;
@@ -49,17 +49,17 @@ button {
   width: 100%;
 }
 
-button:hover {
+.rag-button:hover {
   background-color: #d4b190;
 }
 
-#rag-reset {
+#rag-reset.rag-button {
   background-color: transparent;
   border: 1px solid #e6c6a8;
   color: #e6c6a8;
 }
 
-#rag-reset:hover {
+#rag-reset.rag-button:hover {
   background-color: rgba(230, 198, 168, 0.1);
 }
 
