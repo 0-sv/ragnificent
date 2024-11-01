@@ -20,27 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response && response.success) {
           statusDiv.textContent = "Analysis complete!";
 
-          // Display keywords
+          // Display response text
           categoriesDiv.innerHTML = "";
-          if (Array.isArray(response.results)) {
-            response.results.forEach((keyword, index) => {
-              const div = document.createElement("div");
-              div.className = "category";
-
-              const colorPreview = document.createElement("span");
-              colorPreview.className = "color-preview";
-              colorPreview.style.backgroundColor = colors[index % colors.length];
-
-              const label = document.createElement("span");
-              label.textContent = keyword;
-
-              div.appendChild(colorPreview);
-              div.appendChild(label);
-              categoriesDiv.appendChild(div);
-            });
-          } else {
-            statusDiv.textContent = "No keywords found in analysis.";
-          }
+          const responseDiv = document.createElement("div");
+          responseDiv.className = "response-text";
+          responseDiv.textContent = response.results || "No response received.";
+          categoriesDiv.appendChild(responseDiv);
         } else {
           statusDiv.textContent = "Analysis failed. Please try again.";
         }
