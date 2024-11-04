@@ -2,6 +2,24 @@
 
 A Chrome extension that uses on-device AI to provide quick, relevant answers about any webpage's content.
 
+<!-- TOC -->
+* [RAGnificent](#ragnificent)
+  * [Features](#features)
+  * [How It Works](#how-it-works)
+  * [Techn Stack](#techn-stack)
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Development](#development)
+* [Example prompts](#example-prompts)
+  * [General Comprehension](#general-comprehension)
+  * [Author's Intent and Perspective](#authors-intent-and-perspective-)
+  * [Information Details](#information-details)
+  * [Fact-checking and Critique](#fact-checking-and-critique)
+  * [Contextual and Comparative Analysis](#contextual-and-comparative-analysis)
+  * [Deeper Insights](#deeper-insights)
+  * [Engagement and Interaction](#engagement-and-interaction)
+<!-- TOC -->
+
 ## Features
 
 - 🤖 On-device AI processing for privacy and speed
@@ -18,7 +36,7 @@ A Chrome extension that uses on-device AI to provide quick, relevant answers abo
 3. When you ask a question, the most relevant paragraphs are selected
 4. The on-device AI model generates a concise answer based on the selected context
 
-## Technical Stack
+## Techn Stack
 
 - **Frontend**: Vanilla JavaScript, HTML, CSS
 - **Content Processing**: 
@@ -50,3 +68,57 @@ The project uses a modular structure:
 - `lib/`: Utility functions and core algorithms
   - `bm25.js`: Search relevance ranking
   - `saxParser.js`: HTML parsing utilities
+
+# Example prompts
+
+RAGnificent works well on the following example prompts:
+
+## General Comprehension
+
+- What is the central argument or thesis of the web article?
+- Could you summarize the key points in the article? 
+- What evidence or data does the author provide to support their claims?
+- Are there any counterarguments or alternative perspectives discussed?
+- What conclusion does the author reach by the end?
+
+## Author's Intent and Perspective 
+
+- What seems to be the author's primary objective in writing this article?
+- Does the author show any explicit or implied biases in presenting information?
+- What tone does the author use—formal, conversational, critical, or neutral?
+- Does the author reference external sources/experts? If so, what are they?
+
+## Information Details
+
+- What key statistics are mentioned in the article?
+- What important dates or events are identified?
+- What technical terms or jargon are used and what do they mean? 
+- Is any new research or breakthrough information discussed?
+- What main examples or case studies are included?
+
+## Fact-checking and Critique
+
+- Can claims be verified against provided data?
+- Are sources cited and how reliable are they?
+- Do any elements seem overstated based on content?
+- Is anything unclear or underexplained?
+
+## Contextual and Comparative Analysis
+
+- How does this compare with other articles on the topic?
+- Does it build on or refute prior research/consensus?
+- What larger trends does it reference or relate to?
+- How does it approach the topic differently than others?
+
+## Deeper Insights
+
+- What specific actions/changes are recommended?
+- What implications are hinted at but not fully explored?
+- How could this affect future developments in the field?
+
+## Engagement and Interaction
+
+- What questions remain unanswered?
+- Could this mislead someone unfamiliar with the topic?
+- What parts would spark the most debate?
+- What other resources would help understand the context?
