@@ -36,7 +36,7 @@ A Chrome extension that uses on-device AI to provide quick, relevant answers abo
 3. When you ask a question, the most relevant paragraphs are selected
 4. The on-device AI model generates a concise answer based on the selected context
 
-## Techn Stack
+## Tech Stack
 
 - **Frontend**: Vanilla JavaScript, HTML, CSS
 - **Content Processing**: 
