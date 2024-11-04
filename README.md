@@ -47,12 +47,18 @@ A Chrome extension that uses on-device AI to provide quick, relevant answers abo
 
 ## Installation
 
+If you download the release directly from GitHub, then you can skip steps 1, 2 and 3.
+
 1. Clone this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode"
-4. Click "Load unpacked" and select the project directory
+2. `npm install`
+3. `npm run build`
+4. Open Chrome and navigate to `chrome://extensions/`
+5. Enable "Developer mode"
+6. Click "Load unpacked" and select the `dist` directory
 
 ## Usage
+
+For inspiration, check out the example prompts below.
 
 1. Navigate to any webpage with article content
 2. Click the RAGnificent extension icon
@@ -71,7 +77,7 @@ The project uses a modular structure:
 
 # Example prompts
 
-RAGnificent works well on the following example prompts:
+RAGnificent works well on example prompts like the following:
 
 ## General Comprehension
 
