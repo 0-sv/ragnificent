@@ -6,7 +6,7 @@ A Chrome extension that uses on-device AI to provide quick, relevant answers abo
 * [RAGnificent](#ragnificent)
   * [Features](#features)
   * [How It Works](#how-it-works)
-  * [Techn Stack](#techn-stack)
+  * [Tech Stack](#tech-stack)
   * [Installation](#installation)
   * [Usage](#usage)
   * [Development](#development)
